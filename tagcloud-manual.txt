@@ -1,0 +1,82 @@
+<h1>Getting the Most out of the Wolfe Candy Tag Cloud Generator</h1>
+
+<h2>Introduction</h2>
+<p>The Tag Cloud generator creates a tag cloud at the point in a page or post that it is required using short code.</p>
+<p>Settings can be set using short-code arguments. If provided then these will also override any default settings so that a tag cloud can be altered on a post by post or page by page basis.</p>
+
+<h2>Settings</h2>
+<p>The following are the default settings that influence how a tag cloud is created and displayed. These settings
+can be overridden by passing short-code arguments or POST URL arguments.</p>
+
+<h2>Installation</h2>
+<p>Follow the usual Wordpress instructions to install the plugin files. Either copy a ZIP archive of the plugin folder contents into the Wordpress plugins folder or install it directly from the Wordpress repositiory.</p>
+
+<h2>Shortcode</h2>
+<p>Use <b>[tag-cloud]</b> to show a tag cloud using default settings, short-code args, POST or GET URL args e.g. https://.....page.php?[arg]=xxxx.</p>
+<p>Use <b>[tag-cloud [arg1]="xxxxxxxx" [arg2]="xxxxxxxx"] </b> to use short-code args.</p><br>
+<li>style_box_color="LightGrey" 	: specify as text or hex
+<li>style_border_color="darkblue"	: specify as text or hex
+<li>style_border_width="1px"		: specify as pixels
+<li>style_box_width="75%"		: specify as % to allow for mobile themes
+<li>style_box_padding="2px"		: specify as pixels
+<li>style_font_color="#4F5AA1" 	: must be in hex if it needs to be randomised or shaded
+<li>style_min_font_size=10
+<li>style_max_font_size=35 		: Increasing this will make the text larger, decreasing will make it smaller
+<li>style_set_font=""				: set a font for all tags or else they will be randomly selected between "Arial", "Arial Narrow", "Times", "Helvetica", "Calibri", "Verdana", "Courier", "Candara", "Geneva", "Optima", "Cambria", "Garamond", "Didot", "Perpetua", "Copper Plate". NB: defaults to "Arial" if font specified is not supported by the browser.
+<li>style_random=true	 			: randomise with italics and bold text
+<br>
+<li>style_shade_spread=25 		: if "random shade" is true then this is the random rgb value spread of the shading - this only works if color is specified in hex format
+<li>style_shade_random=true	 	: randomise the text shade/tints
+<li>style_color_random=true 		: choose random base color
+<li>style_multi_random=true 		: choose random base color each time
+<br>		
+<li>style_tag_separator="&nbsp; &nbsp; &nbsp;"	: the characters that divide each tab
+<br>
+<li>list_random=true				: list in a random order or in the array order
+<li>list_vertical=true			: include vertical text
+<li>list_use_ratings=false		: use ratings in an array to specify size (false = random)
+<li>list_max=100					: max number of tags to be displayed
+<br>		
+<li>return_url="current"			: URL of return page for links - blank for no link, "current" if return to current page
+<li>tag_list_mode=""   			: specify the taxonomy to use. The default is "post_tag" but can be set for any taxonomy.
+
+<h2>Recommendations</h2>
+<li>This plugin can make use of the <b>Wolfe Candy Tool Suite</b> framework. If active, the <b>Settings/Wolfe Candy Settings</b> provides and interface where all the shortcode settings are configurable via the Admin dashboard.
+
+<h2>Wordpress Developers</h2>
+<p><b>The tag cloud</b> is a class that is initiated using <b>$tag_cloud = new WlfC_TagCloud;</b>. The args listed in the shortcode above are available <b>$tag_cloud->[arg]</b>. In addition to these, the following are available programatically:</p>
+<li><b>$tag_cloud->SetDefaults($_atts);</b> to be called within any shortcode function and passes the shortcode arguments through.
+<li><b>$tag_cloud->GetDefaults();</b> returns an array of factory defaults and setting options that can be used in a shortcode function e.g. <b>$atts = shortcode_atts( $tag_cloud->GetDefaults(), $_atts );</b>.
+<li>The main list of tags is stored in <b>$tag_cloud->tag_list;</b>. This is an array in the following format so you can pass the tag array directly to the class.
+<p>$tag_cloud->tag_list = array(<br>
+	&nbsp;@nbsp;	'tag1'=>array('link'=>'URL1', 'rating'=>'10'),<br>
+	&nbsp;@nbsp;	'tag2'=>array('link'=>'URL2', 'rating'=>'5'),<br>
+	&nbsp;@nbsp;	'tag3'=>array('link'=>'URL3', 'rating'=>'9'),<br>
+	&nbsp;@nbsp;	'tag4'=>array('link'=>'URL4', 'rating'=>'9')<br>
+);</p>
+<li><b>$tag_cloud->AddTag('[name]','[rating]','[link]');</b> is used to add a tag to the list. This can also be used to start a list. [rating] and [link] are optional.
+<li><b>$tag_cloud->GetSelected();</b> function sets the argument <b>$tag_cloud->selected_tag;</b> as the name of the last tag selected which can be used programmatically locally to process a clicked tag.
+<li><b>$tag_cloud->SetURL();</b> sets the <b>$tag_cloud->return_url</b> to the current page - which is the same as setting it to "current"
+<li><b>$tag_cloud->SetWPTags([taxonomy]);</b> returns an array in tag cloud format of all Word Press tags and links for the specific taxonomy (e.g. "post_tag" or "category"). This means it can be used to tag cloud all types of custom post objects. The taxonomoy defaults to "post_tag". It returns unassigned tags . It also resets the <b>$tag_cloud->tag_list;</b> to be the Word Press Tags array.
+<li><b>$tag_cloud->GetHTML();</b> returns the HTML code for the tag cloud. It is blank if the tag array is empty.
+<br>
+<li><b>$tag_cloud->color_name_to_hex("color")</b> is a utility function in the class to turn text colors into hex values
+<li><b>$tag_cloud->strRGB("hex", "r")</b> is a utility function in the class to return either the r, g or b element of a hex colour
+<li><b>$tag_cloud->random_base_color()</b> is a utility function in the class to return a random hex colour
+<li><b>$tag_cloud->random_color("hex")</b> is a utility function in the class to return a random shade of a specified hex colour
+<hr>
+<h2>The Small Print....</h2>
+<p>This plugin software is released under the GPLv2 (or later) <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">GNU General Public License</a> from the Free Software Foundation. Please check restrictions on commercial use or purchase a commercial license.</p>
+<p><a href="https://www.paypal.com/donate/?hosted_button_id=DY2RMD3J4SR3Q">Donate</a> if you are able to so that the plugins can be maintained and enhanced - especially if you use it and find it useful! Feature enhancements can be paid for or requested (BTW they are considered high priority when coming from a donator!). <b>If everyone donated just $1 for every download they use, it keeps the development going!</b></p>
+<P>   This program is distributed in the hope that it will be useful,
+    but <b>WITHOUT ANY WARRANTY</b>; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">GNU General Public License</a> for more details.
+</P>
+<p>This plugin comes without support unless the licence or enhanced support is explicitly stated as provided. </p>
+<p>The plugin is installed at the user's own risk. No liability is accepted for any damage to data or any consequential damage whatsoever when using this plugin. In any event this is strictly limited to the annual license fee paid.</p>
+<p>Do not expect the code to be top quality. Much of the designs evolve from MVP and often there is redundant code in the files. Most of the code is commented but isnt always consistent. Some of the functions are not as optimised as they could be or the code as well written or structured as it could be. Some chunks of code are commented out for future use. Tinker with it all at your own peril.</p>
+<p>However the code is written with passion - <b>and it works!</b></p>
+<p>Please provide honest feedback and ratings so that the plugin user commmunity can grow.</p>
+<p>Any support issues, feature requests or queries can be emailed to <b><a href="mailto:Wolfecandy@ruralcheshire.co.uk">Wolfecandy@ruralcheshire.co.uk</a></b>. A response is not guaranteed but our head developer, <b>Jrack Wolfe</b> is keen to hear from you.
+<p><b>&copy Copyright Wolfe Candy Creations 2022</b></p>
